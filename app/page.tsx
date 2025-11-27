@@ -2,6 +2,7 @@
 import { ChevronLeft, ChevronRight, BookOpen, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { BibleData } from '@/types/bible';
+import BookGrid from '@/components/bookGrid';
 
 export default function Home() {
   const [fontSize, setFontSize] = useState(18);
@@ -11,14 +12,22 @@ export default function Home() {
 
   const fetchChapter = (bookId: string, chapterNum: number) => {
     fetch(`http://127.0.0.1:5000/api/bibles?book=${bookId}&chapter=${chapterNum}`)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(data => {
         console.log('API Response:', data);
         setBibleData(data.response || data);
         setBook(bookId);
         setChapter(chapterNum);
       })
-      .catch(error => console.error('Fetch error:', error));
+      .catch(error => {
+        console.error('Fetch error:', error);
+        console.error('Failed to fetch:', bookId, chapterNum);
+      });
   };
 
   useEffect(() => {
@@ -28,6 +37,10 @@ export default function Home() {
   const verses = bibleData?.data?.verses || [];
   const chapterContent = bibleData?.data?.content || '';
 
+  const handleBookSelect = (bookId: string) => {
+    fetchChapter(bookId, 1); // Start at chapter 1 when selecting a new book
+  };
+
   return (
     <div className="">
 
@@ -35,7 +48,11 @@ export default function Home() {
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-5 -ml-40">
             <BookOpen size={28} />
-            <h1 className="text-2xl font-serif">Holy Bible</h1>
+            <h1 className="text-2xl font-serif">FaithAI</h1>
+          </div>
+
+          <div className="flex items-center gap-5 -mr-60">
+            <BookGrid onBookSelect={handleBookSelect}/>
           </div>
 
           <button className="p-2 hover:bg-[#3d6b20] rounded-lg transition -mr-40">
@@ -59,7 +76,6 @@ export default function Home() {
                   <h2 className="text-xl font-serif text-[#2d5016] font-semibold">
                     {bibleData?.data?.bookId || book} {bibleData?.data?.number || chapter}
                   </h2>
-                  <p className="text-sm text-[#2d5016]/60">{bibleData?.data?.id || 'Loading...'}</p>
                 </div>
                 
                 <button 
