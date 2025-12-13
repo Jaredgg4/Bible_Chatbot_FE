@@ -11,7 +11,8 @@ export default function Home() {
   const [chapter, setChapter] = useState(1);
 
   const fetchChapter = (bookId: string, chapterNum: number) => {
-    fetch(`http://127.0.0.1:5000/api/bibles?book=${bookId}&chapter=${chapterNum}`)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+    fetch(`${apiUrl}/api/bibles?book=${bookId}&chapter=${chapterNum}`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

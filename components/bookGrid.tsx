@@ -6,7 +6,8 @@ export default function BookGrid({ onBookSelect }: { onBookSelect: (bookId: stri
     const [drop, setDrop] = useState(false);
 
     const fetchBibles = () => {
-        fetch("http://127.0.0.1:5000/api/books")
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+        fetch(`${apiUrl}/api/books`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
