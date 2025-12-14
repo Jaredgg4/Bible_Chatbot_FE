@@ -17,3 +17,13 @@ export interface BibleData {
     verses?: Verse[];
   };
 }
+
+export interface Book {
+  abbreviation?: string;
+  id?: string;
+  name?: string;
+}
+
+export interface bookResponse {
+  data?: Book[];
+}
