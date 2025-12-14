@@ -43,16 +43,18 @@ const authConfig: NextAuthConfig = {
           const user = await res.json();
           
           if (user && user.id) {
-            return {
+            const authUser = {
               id: user.id.toString(),
               email: user.email,
               name: user.username,
             };
+
+            return authUser;
           }
           
           return null;
         } catch (error) {
-          console.error("Auth error:", error);
+          console.error("[AUTH] Authorization error:", error);
           return null;
         }
       },

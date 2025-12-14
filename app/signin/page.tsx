@@ -2,6 +2,7 @@
 
 import { login } from "@/lib/actions/auth";
 import { useState } from "react";
+import { BookOpen, Settings } from "lucide-react";
 
 export default function SignIn() {
   const [error, setError] = useState<string | null>(null);
@@ -14,6 +15,22 @@ export default function SignIn() {
   }
 
   return (
+    <>
+    <header className="bg-[#2d5016] text-[#f5f3ed] px-2 py-2 shadow-md ">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-5 -ml-40">
+            <BookOpen size={28} />
+            <h1 className="text-2xl font-serif">FaithAI</h1>
+          </div>
+
+          <button className="p-2 hover:bg-[#3d6b20] rounded-lg transition -mr-40">
+            <Settings size={24} />
+          </button>
+        </div>
+      </header>
+
+
+
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
         <div>
@@ -72,5 +89,6 @@ export default function SignIn() {
         </form>
       </div>
     </div>
+    </>
   );
 }
