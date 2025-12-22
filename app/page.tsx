@@ -87,45 +87,47 @@ export default function Home() {
   return (
     <div className="">
 
-      <header className="bg-[#2d5016] text-[#f5f3ed] px-2 py-2 shadow-md ">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-5 -ml-40">
-            <BookOpen size={28} />
-            <h1 className="text-2xl font-serif">FaithAI</h1>
+      <header className="bg-[#2d5016] text-[#f5f3ed] px-4 py-2 shadow-md max-w-4xl mx-auto">
+        <div className="flex items-center justify-between gap-2 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-3">
+            <BookOpen size={24} className="md:w-7 md:h-7 shrink-0" />
+            <h1 className="text-lg md:text-2xl font-serif whitespace-nowrap">FaithAI</h1>
           </div>
 
-          <div className="flex items-center gap-5 -mr-60">
+          <div className="flex items-center gap-2 md:gap-5">
             <BookGrid onBookSelect={handleBookSelect}/>
           </div>
 
-          <button className="p-2 hover:bg-[#3d6b20] rounded-lg transition -mr-40">
-            <Settings size={24} />
-          </button>
+          <div className="flex items-center gap-1 md:gap-2">
+            <button className="flex items-center gap-2 p-2 hover:bg-[#3d6b20] rounded-lg transition">
+              <Settings size={20} className="md:w-6 md:h-6" />
+            </button>
 
-          {user ? (
-            <button className="p-2 hover:bg-[#3d6b20] rounded-lg transition -mr-40" onClick={() => setDropDown(!dropDown)}>
-                {user.avatar ? (
-                  <img 
-                    src={user.avatar} 
-                    alt={user.username} 
-                    className="w-8 h-8 rounded-full object-cover"
-                    onError={(e) => {
-                      console.error('[AVATAR] Failed to load avatar image');
-                      e.currentTarget.style.display = 'none';
-                    }}
-                    onLoad={() => console.log('[AVATAR] Avatar loaded successfully')}
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm">
-                    {user.username?.charAt(0).toUpperCase()}
-                  </div>
-                )}
-            </button>
-          ) : (
-            <button className="p-2 hover:bg-[#3d6b20] rounded-lg transition -mr-40">
-              <a href="/signin">Sign In</a>
-            </button>
-          )}
+            {user ? (
+              <button className="flex items-center gap-2 p-2 hover:bg-[#3d6b20] rounded-lg transition" onClick={() => setDropDown(!dropDown)}>
+                  {user.avatar ? (
+                    <img 
+                      src={user.avatar} 
+                      alt={user.username} 
+                      className="w-8 h-8 rounded-full object-cover"
+                      onError={(e) => {
+                        console.error('[AVATAR] Failed to load avatar image');
+                        e.currentTarget.style.display = 'none';
+                      }}
+                      onLoad={() => console.log('[AVATAR] Avatar loaded successfully')}
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm">
+                      {user.username?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+              </button>
+            ) : (
+              <button className="flex items-center gap-2 p-2 hover:bg-[#3d6b20] rounded-lg transition">
+                <a href="/signin">Sign In</a>
+              </button>
+            )}
+          </div>
 
           {dropDown && (
             <div className="absolute right-0 mt-20 w-48 bg-white rounded-lg shadow-lg">
