@@ -87,18 +87,18 @@ export default function Home() {
   return (
     <div className="">
 
-      <header className="bg-[#2d5016] text-[#f5f3ed] px-4 py-2 shadow-md max-w-4xl mx-auto">
-        <div className="flex items-center justify-between gap-2 md:gap-4">
-          <div className="flex items-center gap-2 md:gap-3">
+      <header className="bg-[#2d5016] text-[#f5f3ed] px-4 md:px-8 py-2 shadow-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 md:gap-8">
+          <div className="flex items-center gap-2 md:gap-4">
             <BookOpen size={24} className="md:w-7 md:h-7 shrink-0" />
             <h1 className="text-lg md:text-2xl font-serif whitespace-nowrap">FaithAI</h1>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-5">
+          <div className="flex items-center gap-2 md:gap-5 flex-1 justify-center max-w-md">
             <BookGrid onBookSelect={handleBookSelect}/>
           </div>
 
-          <div className="flex items-center gap-1 md:gap-2">
+          <div className="flex items-center gap-2 md:gap-4">
             <button className="flex items-center gap-2 p-2 hover:bg-[#3d6b20] rounded-lg transition">
               <Settings size={20} className="md:w-6 md:h-6" />
             </button>
