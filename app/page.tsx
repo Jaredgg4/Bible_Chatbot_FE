@@ -5,6 +5,7 @@ import { BibleData } from '@/types/bible';
 import BookGrid from '@/components/bookGrid';
 import { User } from '@/types/User';
 import LogoutButton from '@/components/logoutButton';
+import Scripture from '@/components/scripture';
 
 export default function Home() {
   const [fontSize, setFontSize] = useState(18);
@@ -77,13 +78,6 @@ export default function Home() {
   loadUser();
 }, []);
 
-  const verses = bibleData?.data?.verses || [];
-  const chapterContent = bibleData?.data?.content || '';
-
-  const handleBookSelect = (bookId: string) => {
-    fetchChapter(bookId, 1); // Start at chapter 1 when selecting a new book
-  };
-
   return (
     <div className="">
 
@@ -92,10 +86,6 @@ export default function Home() {
           <div className="flex items-center gap-2 md:gap-4">
             <BookOpen size={24} className="md:w-7 md:h-7 shrink-0" />
             <h1 className="text-lg md:text-2xl font-serif whitespace-nowrap">FaithAI</h1>
-          </div>
-
-          <div className="flex items-center gap-2 md:gap-5 flex-1 justify-center max-w-md">
-            <BookGrid onBookSelect={handleBookSelect}/>
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
@@ -137,49 +127,9 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="bg-white border-b border-[#2d5016]/10 px-6 py-3">
-              <div className="max-w-4xl mx-auto flex items-center justify-between">
-                <button 
-                  onClick={() => fetchChapter(book, chapter - 1)}
-                  disabled={chapter <= 1}
-                  className="flex items-center gap-2 text-[#2d5016] hover:text-[#3d6b20] transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <ChevronLeft size={20} />
-                  <span className="font-medium">Previous</span>
-                </button>
-                
-                <div className="text-center">
-                  <h2 className="text-xl font-serif text-[#2d5016] font-semibold">
-                    {bibleData?.data?.bookId || book} {bibleData?.data?.number || chapter}
-                  </h2>
-                </div>
-                
-                <button 
-                  onClick={() => fetchChapter(book, chapter + 1)}
-                  className="flex items-center gap-2 text-[#2d5016] hover:text-[#3d6b20] transition"
-                >
-                  <span className="font-medium">Next</span>
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-      </div>
-
       <main className="flex-1 px-6 py-8">
         <div className="max-w-3xl mx-auto">
-          <article className="space-y-4 text-[#1a1a1a]" style={{ fontSize: `${fontSize}px` }}>
-            {verses.length > 0 ? (
-              verses.map((verse) => (
-                <div key={verse.id} className="flex gap-3">
-                  <span className="font-bold text-[#2d5016] min-w-8">{verse.verse}</span>
-                  <p className="leading-relaxed">{verse.content}</p>
-                </div>
-              ))
-            ) : chapterContent ? (
-              <div dangerouslySetInnerHTML={{ __html: chapterContent }} />
-            ) : (
-              <p className="text-[#2d5016]/60 text-center">Loading...</p>
-            )}
-          </article>
+          <Scripture/>
         </div>
       </main>
 
@@ -200,14 +150,11 @@ export default function Home() {
               A+
             </button>
           </div>
-          
-          <div className="text-sm text-[#2d5016]/60">
-            {verses.length > 0 ? `${verses.length} verses` : 'Loading...'}
-          </div>
         </div>
       </footer>
 
     </div>
+    
   );
 }
 
