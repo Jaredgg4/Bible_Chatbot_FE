@@ -27,3 +27,20 @@ export interface Book {
 export interface bookResponse {
   data?: Book[];
 }
+
+
+export interface scriptureResponse {
+  data?: {
+    id?: string;
+    bookId?: string;
+    chapterId?: string;
+    bibleId?: string;
+    reference?: string;
+    verses?: Verse[];
+    content?: string;
+  };
+}
+
+export interface Chapter {
+  data?: Verse[];
+}
