@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import BookGrid from "./bookGrid";
+import Notes from "./notes";
+import axios from "axios";
 
 interface ParsedVerse {
   number: string;
@@ -12,6 +14,9 @@ export default function Scripture() {
     const [chapterNum, setChapterNum] = useState<number>(1);
     const [verses, setVerses] = useState<ParsedVerse[]>([]);
     const [highlightedVerses, setHighlightedVerses] = useState<Set<string>>(new Set());
+    const [isHovered, setIsHovered] = useState(false);
+    const [userId, setUserId] = useState<string | null>(null)
+    const apiURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
     const parseVersesFromHtml = (html: string): ParsedVerse[] => {
       const parser = new DOMParser();
@@ -72,6 +77,35 @@ export default function Scripture() {
       });
     };
 
+    useEffect(() => {
+        const fetchUserId = async () => {
+            const res = await fetch('/api/auth/session')
+            const data = await res.json()
+            if (data.user?.id) {
+                setUserId(data.user.id)
+            }
+        }
+        fetchUserId()
+    }, [])
+
+    const handleVerse = async (verseNum: string) => {
+        if (!userId) {
+            console.log('User not logged in')
+            return
+        }
+        try {
+            const response = await axios.post(`${apiURL}/api/users/${userId}/notes`, {
+                verse: highlightedVerses
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        } catch(error) {
+            console.log(error)
+        }
+    }
+
   useEffect(() => {
     fetchChapter(book, chapterNum);
   }, []);
@@ -121,18 +155,22 @@ export default function Scripture() {
           <article className="space-y-4 text-[#1a1a1a]" style={{ fontSize: `18px` }}>
             {verses.length > 0 ? (
               verses.map((verse) => (
-                <p
-                  key={verse.number}
-                  onClick={() => toggleHighlight(verse.number)}
-                  className={`leading-relaxed cursor-pointer rounded px-2 py-1 transition-colors ${
-                    highlightedVerses.has(verse.number)
-                      ? 'bg-yellow-200'
-                      : 'hover:bg-gray-100'
-                  }`}
-                >
-                  <span className="font-bold text-[#2d5016] mr-2">{verse.number}</span>
-                  {verse.content}
-                </p>
+                <div key={verse.number}>
+                  <p
+                    onClick={() => [toggleHighlight(verse.number), handleVerse(verse.number)]}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    className={`leading-relaxed cursor-pointer rounded px-2 py-1 transition-colors ${
+                      highlightedVerses.has(verse.number)
+                        ? 'bg-yellow-200'
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    <span className="font-bold text-[#2d5016] mr-2">{verse.number}</span>
+                    {verse.content}
+                  </p>
+                  {highlightedVerses.has(verse.number) && <Notes />}
+                </div>
               ))
             ) : (
               <p className="text-[#2d5016]/60 text-center">Loading...</p>
